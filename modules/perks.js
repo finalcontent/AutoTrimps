@@ -1375,6 +1375,7 @@ RAutoPerks.initializePerks = function () {
     var championism = new RAutoPerks.VariablePerk("championism", 1000000000, true,      14, 0.1);
     
     equality.exprate = 1.5;
+    championism.exprate = 5;
     //scruffy
 	//no
     //tier2
