@@ -18,7 +18,7 @@ var prestraid = !1,
     presteps = null,
     minMaxMapCost, fMap, pMap, shouldFarmFrags = !1,
     praidDone = !1;
-
+	
 function mano() {
     console.log('Console opened!');
 }
@@ -3627,8 +3627,23 @@ var fastimps = [
 ];
 
 function Rmanageequality() {
-
-    if (!(game.global.challengeActive == "Exterminate" && getPageSetting('Rexterminateon') == true && getPageSetting('Rexterminateeq') == true && !game.global.mapsActive)) {
+	if (game.global.challengeActive == "Archaeology") {
+		if (!game.portal.Equality.scalingActive) {
+            if (RcalcOurHealth() > (getCurrentEnemy().attack * .1)) {
+				game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) + 1);
+				manageEqualityStacks();
+				updateEqualityScaling();
+			} else if (RcalcOurHealth() < (getCurrentEnemy().attack * .05)) {
+				game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) - 1);
+				manageEqualityStacks();
+				updateEqualityScaling();
+			} 
+        } else {
+			game.portal.Equality.scalingActive = false;
+			manageEqualityStacks();
+            updateEqualityScaling();
+		}
+	} else if (!(game.global.challengeActive == "Exterminate" && getPageSetting('Rexterminateon') == true && getPageSetting('Rexterminateeq') == true && !game.global.mapsActive)) {
         if ((game.global.challengeActive == "Glass") || (fastimps.includes(getCurrentEnemy().name)) || (game.global.mapsActive && getCurrentMapObject().location == "Void" && game.global.voidBuff == 'doubleAttack') || (!game.global.mapsActive && game.global.gridArray[game.global.lastClearedCell+1].u2Mutation.length > 0)) {
             if (!game.portal.Equality.scalingActive) {
                 game.portal.Equality.scalingActive = true;
