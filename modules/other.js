@@ -3635,7 +3635,7 @@ function Rmanageequality() {
 				game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) + 1);
 				manageEqualityStacks();
 				updateEqualityScaling();
-			} else if (game.portal.Equality.radLevel > 0 && RcalcOurHealth() > ((getCurrentEnemy().attack * game.portal.Equality.getMult()) * RmanMin)) {
+			} else if (parseInt(game.portal.Equality.disabledStackCount) > 0 && RcalcOurHealth() > ((getCurrentEnemy().attack * game.portal.Equality.getMult()) * RmanMin)) {
 				game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) - 1);
 				manageEqualityStacks();
 				updateEqualityScaling();
