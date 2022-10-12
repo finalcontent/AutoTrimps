@@ -3626,16 +3626,17 @@ var fastimps = [
     "Ubersmith"
 ];
 
-var RmanMax = .1;
-var RmanMin = .05;
+var ReHits = 10;
+var ReHitDelta = 2;
 function Rmanageequality() {
 	if (game.global.challengeActive == "Archaeology") {
 		if (!game.portal.Equality.scalingActive) {
-            if (game.portal.Equality.radLevel > parseInt(game.portal.Equality.disabledStackCount) && RcalcOurHealth() < ((getCurrentEnemy().attack * game.portal.Equality.getMult()) * RmanMax)) {
-				game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) + 1);
+            //if (game.portal.Equality.radLevel > parseInt(game.portal.Equality.disabledStackCount) && RcalcOurHealth() < ((getCurrentEnemy().attack * game.portal.Equality.getMult()) * RmanMax)) {
+			if (game.portal.Equality.radLevel > parseInt(game.portal.Equality.disabledStackCount) &&  (ReHits - ReHitDelta) > (RcalcOurHealth() / (getCurrentEnemy().attack * game.portal.Equality.getMult())) ) {	
+				game.portal.Equality.disabledStackCount = String(game.portal.Equality.radLevel);
 				manageEqualityStacks();
 				updateEqualityScaling();
-			} else if (parseInt(game.portal.Equality.disabledStackCount) > 0 && RcalcOurHealth() > ((getCurrentEnemy().attack * game.portal.Equality.getMult()) * RmanMin)) {
+			} else if (parseInt(game.portal.Equality.disabledStackCount) > 0 && (ReHits + ReHitDelta) < (RcalcOurHealth() / (getCurrentEnemy().attack * game.portal.Equality.getMult())) ) {
 				game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) - 1);
 				manageEqualityStacks();
 				updateEqualityScaling();
