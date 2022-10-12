@@ -3631,11 +3631,11 @@ var RmanMin = .05;
 function Rmanageequality() {
 	if (game.global.challengeActive == "Archaeology") {
 		if (!game.portal.Equality.scalingActive) {
-            if (RcalcOurHealth() > ((getCurrentEnemy().attack * game.portal.Equality.getMult()) * RmanMax)) {
+            if (game.portal.Equality.radLevel > parseInt(game.portal.Equality.disabledStackCount) && RcalcOurHealth() > ((getCurrentEnemy().attack * game.portal.Equality.getMult()) * RmanMax)) {
 				game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) + 1);
 				manageEqualityStacks();
 				updateEqualityScaling();
-			} else if (RcalcOurHealth() < ((getCurrentEnemy().attack * game.portal.Equality.getMult()) * RmanMin)) {
+			} else if (game.portal.Equality.radLevel > 0 && RcalcOurHealth() < ((getCurrentEnemy().attack * game.portal.Equality.getMult()) * RmanMin)) {
 				game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) - 1);
 				manageEqualityStacks();
 				updateEqualityScaling();
