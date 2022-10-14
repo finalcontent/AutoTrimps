@@ -3626,21 +3626,24 @@ var fastimps = [
     "Ubersmith"
 ];
 
-var ReHits = 10;
-var ReHitDelta = 2;
 function Rmanageequality() {
 	if (game.global.challengeActive == "Archaeology") {
 		if (!game.portal.Equality.scalingActive) {
-            //if (game.portal.Equality.radLevel > parseInt(game.portal.Equality.disabledStackCount) && RcalcOurHealth() < ((getCurrentEnemy().attack * game.portal.Equality.getMult()) * RmanMax)) {
-			if (game.portal.Equality.radLevel > parseInt(game.portal.Equality.disabledStackCount) &&  (ReHits - ReHitDelta) > (RcalcOurHealth() / (getCurrentEnemy().attack * game.portal.Equality.getMult())) ) {	
-				game.portal.Equality.disabledStackCount = String(game.portal.Equality.radLevel);
-				manageEqualityStacks();
+            if (game.portal.Equality.radLevel > parseInt(game.portal.Equality.disabledStackCount) && getCurrentEnemy().attack * 1.5 * game.portal.Equality.getMult() > game.global.soldierHealthMax *.33) {
+				if ( game.global.soldierHealth < (getCurrentEnemy().attack * 1.5 * game.portal.Equality.getMult())*1.2 ){
+					// if new enemy will kill next attack, set equality to max
+					game.portal.Equality.disabledStackCount = String(game.portal.Equality.radLevel);
+				}
+				else {
+					game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) + 1);
+				}
+                manageEqualityStacks();
 				updateEqualityScaling();
-			} else if (parseInt(game.portal.Equality.disabledStackCount) > 0 && (ReHits + ReHitDelta) < (RcalcOurHealth() / (getCurrentEnemy().attack * game.portal.Equality.getMult())) ) {
+			} else if (parseInt(game.portal.Equality.disabledStackCount) > 0 && (getCurrentEnemy().attack * 1.5 * game.portal.Equality.getMult())/.9 < game.global.soldierHealthMax *.33) {
 				game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) - 1);
 				manageEqualityStacks();
 				updateEqualityScaling();
-			} 
+			}  
         } else {
 			game.portal.Equality.scalingActive = false;
 			manageEqualityStacks();
