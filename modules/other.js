@@ -3629,21 +3629,57 @@ var fastimps = [
 function Rmanageequality() {
 	if (game.global.challengeActive == "Archaeology") {
 		if (!game.portal.Equality.scalingActive) {
-            if (game.portal.Equality.radLevel > parseInt(game.portal.Equality.disabledStackCount) && getCurrentEnemy().attack * 1.5 * game.portal.Equality.getMult() > game.global.soldierHealthMax *.33) {
-				if ( game.global.soldierHealth < (getCurrentEnemy().attack * 1.5 * game.portal.Equality.getMult())*1.2 ){
+			var desiredEq;
+			if (game.global.voidBuff) {
+					if (game.global.voidBuff = "doubleAttack") {
+						desiredEq = Math.ceil( Math.log( (game.global.soldierHealthMax *.33)/(RcalcBadGuyDmg(getCurrentEnemy()) * 3)) / Math.log(game.portal.Equality.getModifier() ) );
+					} else if (game.global.voidBuff = "getCrit") {
+						desiredEq = Math.ceil( Math.log( (game.global.soldierHealthMax *.33)/(RcalcBadGuyDmg(getCurrentEnemy()) * 5)) / Math.log(game.portal.Equality.getModifier() ) );
+					} else if (game.global.voidBuff = "bleed") {
+						desiredEq = Math.ceil( Math.log( (game.global.soldierHealthMax * .13) / (RcalcBadGuyDmg(getCurrentEnemy()) * 1.5 )) / Math.log(game.portal.Equality.getModifier() ) );
+					}
+			//RcalcOurDmg() and RcalcBadGuyDmg do not use equality with scaling off
+			} else if ( (!fastimps.includes(getCurrentEnemy().name) && (game.global.soldierEnergyShield + game.global.soldierHealth) / (RcalcBadGuyDmg(getCurrentEnemy()) * 1.5) > getCurrentEnemy().health / (RcalcOurDmg() * .5) ) || (fastimps.includes(getCurrentEnemy().name) &&  (game.global.soldierEnergyShield + game.global.soldierHealth) / (RcalcBadGuyDmg(getCurrentEnemy()) * 1.5) > (getCurrentEnemy().health / (RcalcOurDmg() * .5)) + 1 ) ) {
+				//If will kill first at 0 equality, set to 0 -- risky, remove health from calc for safe
+				game.portal.Equality.disabledStackCount = String(0);
+				manageEqualityStacks();
+				updateEqualityScaling();
+				
+			} else {
+				if ( game.global.soldierEnergyShield > 0 && game.global.soldierEnergyShieldMax / (RcalcBadGuyDmg(getCurrentEnemy()) * 1.5) > .2 ) {
+					desiredEq = Math.ceil( Math.log( (game.global.soldierEnergyShield + game.global.soldierHealthMax *.33)/(RcalcBadGuyDmg(getCurrentEnemy()) * 1.5) ) / Math.log(game.portal.Equality.getModifier() ) );
+				} else	{ 
+					desiredEq = Math.ceil( Math.log( (game.global.soldierHealthMax *.33)/(RcalcBadGuyDmg(getCurrentEnemy()) * 1.5) ) / Math.log(game.portal.Equality.getModifier() ) );
+				}
+				
+				if ( desiredEq < 0 ){
+					desiredEq = 0
+				} else if ( desiredEq > game.portal.Equality.radLevel) {
+					desiredEq = game.portal.Equality.radLevel;
+				}
+				game.portal.Equality.disabledStackCount = String(desiredEq);
+				manageEqualityStacks();
+				updateEqualityScaling();
+			}
+			/* if ((!fastimps.includes(getCurrentEnemy().name)) && (game.global.soldierEnergyShieldMax + game.global.soldierHealth) / (getCurrentEnemy().attack * 1.5) > getCurrentEnemy().health / (game.global.soldierCurrentAttack * .75) || fastimps.includes(getCurrentEnemy().name) && ((game.global.soldierEnergyShieldMax + game.global.soldierHealth) / (getCurrentEnemy().attack * 1.5) +1) > getCurrentEnemy().health / RcalcOurDmg()) {
+				game.portal.Equality.disabledStackCount = String(0);
+				manageEqualityStacks();
+				updateEqualityScaling();
+			} else if (game.portal.Equality.radLevel > parseInt(game.portal.Equality.disabledStackCount) && getCurrentEnemy().attack * 1.5 * game.portal.Equality.getMult() > (game.global.soldierHealthMax *.33)+game.global.soldierEnergyShield ) {
+				if ( (game.global.soldierHealth + game.global.soldierEnergyShield) < (getCurrentEnemy().attack * 1.5 * game.portal.Equality.getMult())*1.2 ){
 					// if new enemy will kill next attack, set equality to max
-					game.portal.Equality.disabledStackCount = String(game.portal.Equality.radLevel);
+					game.portal.Equality.disabledStackCount = String(game.portal.Equality.radLevel);				
 				}
 				else {
 					game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) + 1);
 				}
                 manageEqualityStacks();
 				updateEqualityScaling();
-			} else if (parseInt(game.portal.Equality.disabledStackCount) > 0 && (getCurrentEnemy().attack * 1.5 * game.portal.Equality.getMult())/.9 < game.global.soldierHealthMax *.33) {
+			} else if (parseInt(game.portal.Equality.disabledStackCount) > 0 && (getCurrentEnemy().attack * 1.5 * game.portal.Equality.getMult())/.9 < ((game.global.soldierHealthMax * .33) + game.global.soldierEnergyShield) ) {
 				game.portal.Equality.disabledStackCount = String(parseInt(game.portal.Equality.disabledStackCount) - 1);
 				manageEqualityStacks();
 				updateEqualityScaling();
-			}  
+			} */  
         } else {
 			game.portal.Equality.scalingActive = false;
 			manageEqualityStacks();
