@@ -1517,6 +1517,8 @@ function BWraiding() {
         if (getPageSetting('AutoMaps') == 1 && !bwraided && !failbwraid) {
             autoTrimpSettings["AutoMaps"].value = 0;
         }
+        
+        game.options.menu.climbBw.enabled = 0;
 
         while (!game.global.preMapsActive && !bwraidon) mapsClicked();
 
@@ -1801,6 +1803,9 @@ function dailyBWraiding() {
         if (game.options.menu.repeatUntil.enabled != 2 && !dbwraided && !dfailbwraid) {
             game.options.menu.repeatUntil.enabled = 2;
         }
+        
+        game.options.menu.climbBw.enabled = 0;
+        
         if (game.global.preMapsActive && !dbwraided && !dfailbwraid) {
             selectMap(findLastBionic().id);
             dfailbwraid = false;

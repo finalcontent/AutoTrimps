@@ -77,6 +77,11 @@ function calcOurHealth(stance) {
     if (game.portal.Resilience.level > 0) {
         health *= (Math.pow(game.portal.Resilience.modifier + 1, game.portal.Resilience.level));
     }
+	
+    health *= game.challenges.Mayhem.getTrimpMult();
+
+    health *= game.challenges.Pandemonium.getTrimpMult();
+
     var geneticist = game.jobs.Geneticist;
     if (geneticist.owned > 0) {
         health *= (Math.pow(1.01, game.global.lastLowGen));
@@ -260,6 +265,11 @@ function calcOurDmg(minMaxAvg, incStance, incFlucts) {
     if (game.talents.herbalist.purchased) {
         number *= game.talents.herbalist.getBonus();
     }
+
+    number *= game.challenges.Mayhem.getTrimpMult();
+
+    number *= game.challenges.Pandemonium.getTrimpMult();
+
     if (game.global.sugarRush > 0) {
         number *= sugarRush.getAttackStrength();
     }
